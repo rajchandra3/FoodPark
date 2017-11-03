@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%=title%></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+          crossorigin="anonymous">
+    <style>
+        .h-scroll {
+            width: 100%;
+            /*height: 60vh; !* %-height of the viewport *!*/
+            position: relative;
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+
+<body style="background-image:url('/images/home_back.jpg'); ">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+<!--Angular Goes Here-->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.js"></script>
+<h1 style="background-color: #FFF8DC;">
+    <img src="images/logo.png" alt="logo">
+    <small>food over Everything !</small>
+</h1>
+
+<div style="padding: 0.5%; border-radius: 10px;">
+    <a href="#" data-toggle="modal" data-target="#addOrder" style="margin: 5%;">
+        <button class="btn btn-danger pull-right">Add new Order</button>
+    </a>
+    <div class="col-lg-12" style=" padding: 1%; overflow-y:scroll; height:400px; background:white;">
+        <table class="table table-striped table-hover h-scroll">
+            <thead class="thead-default">
+            <tr>
+                <th>Order ID</th>
+                <th>Table Number</th>
+                <th>Customer</th>
+                <th>Order</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <% for(var i=order.length-1; i>-1; i--) {%>
+                <%if(order[i].delivered == false){ %>
+                    <tr ng-repeat="data in report">
+                        <th><%=order[i].orderNo%></th>
+                        <td><%=order[i].tableNumber%></td>
+                        <td><%=order[i].customerName%></td>
+                        <td><%=order[i].orderDetail[0].item%></td>
+                        <td><%=order[i].orderDetail[0].qty%></td>
+                        <td><%=order[i].orderDetail[0].price * order[i].orderDetail[0].qty%></td>
+                        <td>
+                            <a href="/editOrder/<%=order[i]._id%>" class="btn btn-info">Edit Order</a>
+                        </td>
+                        <td>
+                            <form action="/<%=order[i]._id%>" method="get" class="form">
+                                <button class="btn btn-success">Delivered</button>
+                            </form>
+                        </td>
+                    </tr>
+                <%}%>
+            <%} %>
+            </tbody>
+        </table>
+    </div>
+    <div id="addOrder" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="content">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h4 class="modal-title offset-5 "><b>FoodPark</b> </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form action="/orderAdded" method="post">
+                        <div class="form-group">
+                            <label  for="customerName">Customer Name</label>
+                            <input type="text" class="form-control form-control-sm mr-1" name="customerName" id="customerName" placeholder="Enter Customer Name" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label for="customerContact">Customer Contact</label>
+                            <input type="text" class="form-control form-control-sm mr-1" name="customerContact" id="customerContact" placeholder="Contact details" required="required">
+                        </div>
+                        <div class="form-group">
+                            <label for="orderItem">Take Order</label>
+                            <input type="text" class="form-control form-control-sm mr-1" name="orderItem" id="orderItem" placeholder="What do you want?" required="required">
+                            <label for="qty">Quantity</label>
+                            <input type="text" class="form-control form-control-sm mr-1" name="qty" id="qty" placeholder="How many?" required="required">
+                            <label for="priceOfOrder">Price</label>
+                            <input type="text" class="form-control form-control-sm mr-1" name="priceOfOrder" id="priceOfOrder" placeholder="priceOfOrder" required="required">
+
+                        </div>
+                        <div class="form-group">
+                            <label for="tableNumber">Assign a table number</label>
+                            <input type="text" class="form-control form-control-sm mr-1" name="tableNumber" id="tableNumber" placeholder="tableNumber" required="required">
+                        </div>
+                        <div class="message-container">
+                            <p class="text-warning"><%= msg %></p>
+                        </div>
+                        <br>
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary btn-sm">ADD ORDER</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
